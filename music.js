@@ -23,11 +23,12 @@ const btn_next = $('.btn_next')
 const btn_aback = $('.btn_aback')
 var blockTime = $('.time_song')
 var blockTotolTime = $('.totolTimeSong')
-var get_listSong
+var btn_listSong = $('.list_song')
 var song_duration
 var percenProgress;
 var rewind ;
-var randomSong = true
+var randomSong = false
+var loop = false
 // kết thúc control
 // render list-song
 var app = {
@@ -153,14 +154,14 @@ var app = {
         })
     },
     render: function() {
-        var html = this.list_song.map(function(song) {
-            return `<li>
+        var html = this.list_song.map(function(song, index) {
+            return `<li class="song ${index === app.currentIndex ? 'test1' : ''}" data-id = "${index}">
             <img src="${song.img}" alt="">
             <div class="singer_song">
                 <h3>${song.name}</h3>
                 <p>${song.singer}</p>
             </div>
-            <div>
+            <div class = "options">
              <i class="fas fa-ellipsis-h"></i>
             </div>
         </li>`
@@ -224,49 +225,60 @@ var app = {
             cd_quay.pause()
             
         }
-        audio.loop = false
         repeat.onclick = function() {
             repeat.classList.toggle('test')
-            if(audio.loop == false) {
+            if(!loop) {
                 audio.loop = true
+                loop = true
             } else {
                 audio.loop = false
+                loop = false
             }
         
         }
         // random bài hát
         random.onclick = function() {
-            if(randomSong) {
+            if(!randomSong) {
                 random.classList.add('test')
-                randomSong = false
+                randomSong = true
             }          
             else {
                 random.classList.remove('test')
-                randomSong = true
+                randomSong = false
             }
         }
        
        // 
     // xử lý click next, aback
     btn_next.onclick = function() {
-        app.next_song()
-        
+        if(randomSong) {
+            app.random_song()
+        }else{
+            app.next_song()
+        }       
     }
     btn_aback.onclick = function() {
-        app.aback_song()
+        if(randomSong) {
+            app.random_song()
+        }else{
+            app.aback_song()
+        }   
     }
     
 
     },
     // xử lý khi click vào  bài hát
     click_song: function() {
-        get_listSong = $$('.list_song ul li')
-        get_listSong.forEach(function(e,idex) {
-            e.onclick = function() {
-                app.currentIndex = idex
-                app.load_currentsong()
-            }
-        })
+       btn_listSong.onclick = function(e) {
+           const songNode = e.target.closest('.song:not(.test)')
+           if(songNode || e.target.closest('.option')) {
+               if(songNode) {
+                   app.currentIndex = Number(songNode.dataset.id)
+                   app.render()
+                   app.load_currentsong()               
+               }
+           }
+       }
     },
     formatTime: function(sec_num) {
         var minutes = Math.floor(sec_num/60)
@@ -284,19 +296,8 @@ var app = {
             if(song_duration) {
                 percenProgress = Math.floor((audio.currentTime/song_duration) *100)
                 progress.value = percenProgress
-                // tự động chuyển bài
-                if(audio.currentTime == song_duration) {
-                    app.currentIndex++
-                    if(app.currentIndex > app.list_song.length -1) {
-                        app.currentIndex = 0
-                    }
-                    app.load_currentsong()
-                    app.update_Timesong()
-                }
-                // 
                 const time1 = app.formatTime(audio.currentTime)
                 blockTime.innerText = time1
-
             }  
            }
            progress.onchange = function(e) {
@@ -305,24 +306,58 @@ var app = {
                audio.currentTime = rewind         
            }
     },
+    auto_nextSong: function() {
+        audio.onended = function() {
+            if(randomSong) {
+                app.random_song()
+            } else {
+                app.currentIndex++
+                if(app.currentIndex > app.list_song.length -1) {
+                    app.currentIndex = 0
+                }
+                app.render()
+                app.load_currentsong()
+                app.scrollSong()
+            }
+        }
+    },
     next_song: function() {
         this.currentIndex++
         if(this.currentIndex > (this.list_song.length - 1)) {
             this.currentIndex = 0
         }
+        this.render()
         this.load_currentsong()
+        app.scrollSong()
+        
     },
     // random song
     random_song: function() {
-      this.currentIndex = Math.floor(Math.random() * this.list_song.length)
-      console.log(this.currentIndex)
+        var indexRandom 
+        do {
+            indexRandom = Math.floor(Math.random() * (this.list_song.length))
+        } while(this.currentIndex === indexRandom)
+        this.currentIndex = indexRandom
+        app.render()
+        this.load_currentsong()
+        app.scrollSong()
     },
     aback_song: function() {
         this.currentIndex--
         if(this.currentIndex < 0 ) {
             this.currentIndex = this.list_song.length - 1
         }
+        this.render()
         this.load_currentsong()
+        app.scrollSong()
+    },
+    scrollSong: function() {
+        setTimeout(() => {
+            $('.song.test1').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+        }, 300);
     },
     load_currentsong: function() {
         header.innerText = this.current_song.name
@@ -343,9 +378,9 @@ var app = {
         this.handleEvent()
         this.render()
         this.load_currentsong()
-        this.click_song()
         this.update_Timesong()
-        this.random_song()
+        this.auto_nextSong()
+        this.click_song()
     }
 }
 app.start()

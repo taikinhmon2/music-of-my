@@ -470,7 +470,10 @@ ul.option_seting1 {
 }
 .control div:hover {
     cursor: pointer;
-    opacity: 0.8;
+}
+.control .btn_aback:active,
+.control .btn_next:active {
+    opacity: 0.6;
 }
 .control div.btn_pause {
     display: none;
@@ -504,10 +507,11 @@ ul.option_seting1 {
 .test {
     color: #ee2c71f7;
 }
+
 /* list bài hát */
 .list_song {
     width: 100%;
-    margin-top: 550px;
+    margin-top: 580px;
 }
 .list_song ul {
     width: 50%;
@@ -552,3 +556,7 @@ ul.option_seting1 {
     display: block;
 }
 /* kết thúc display chung */
+.list_song ul .test1 {
+    background-color: #ee2c71f7;
+    color: #fff;
+}
