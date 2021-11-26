@@ -29,6 +29,7 @@ var percenProgress;
 var rewind ;
 var randomSong = false
 var loop = false
+var search = $('.timkiem')
 // kết thúc control
 // render list-song
 var app = {
@@ -72,7 +73,7 @@ var app = {
         },
         {
             name:'YÊU LÀ CƯỚI',
-            singer:'THÁI HỌC',
+            singer:'Phát Hồ',
             img:'https://data.chiasenhac.com/data/cover/147/146033.jpg',
             path: './music/Yeu La Cuoi - Phat Ho.mp3'
         },
@@ -168,6 +169,20 @@ var app = {
         })
         var hienthi = $('.list_song ul')
         hienthi.innerHTML = html.join('')
+    },
+    searchSong: function() {
+        search.onchange = function(e) {
+            var idd
+            var songSearch =  app.list_song.find(function(e1,idsong) {
+            idd = idsong
+            return e1.name.toLowerCase() == e.target.value.toLowerCase() || e1.singer.toLowerCase() == e.target.value.toLowerCase()
+            })
+            console.log(songSearch, idd)
+            app.currentIndex = idd
+            app.render()
+            app.load_currentsong()
+            app.scrollSong()
+        }
     },
     handleEvent: function() {
         var open_seting = $('.seting')
@@ -381,6 +396,7 @@ var app = {
         this.update_Timesong()
         this.auto_nextSong()
         this.click_song()
+        this.searchSong()
     }
 }
 app.start()
