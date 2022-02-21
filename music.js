@@ -172,6 +172,7 @@ var app = {
     },
     searchSong: function() {
         search.onchange = function(e) {
+            console.log(e)
             var idd
             var songSearch =  app.list_song.find(function(e1,idsong) {
             idd = idsong
