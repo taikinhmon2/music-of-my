@@ -38,7 +38,7 @@ var app = {
         {
             name:'NEVEDA',
             singer:'Vicetone',
-            img:'https://photo-resize-zmp3.zadn.vn/w240_r1x1_webp/cover/2/3/1/1/2311971204a1e383f86c97706a8ecda9.jpeg',
+            img:'https://kenhtingamenet.ewr1.vultrobjects.com/2021/06/yua-mikami-tu-chia-se-anh-cuc-xau-trong-qua-khu-ke-ve-lan-dau-thoi-con-la-chi-dai-tai-truong.jpg',
             path: './music/Nevada - Vicetone_ Cozi Zuehlsdorff.mp3'
         },
         {
@@ -104,7 +104,7 @@ var app = {
         {
             name:'Shirfine - Illusionary Daytime',
             singer:'[Zuaste & AlexDy Remix]',
-            img:'https://i1.sndcdn.com/avatars-Jx7TTvtyePMSQUeh-m7vMsQ-t200x200.jpg',
+            img:'https://i1.sndcdn.com/artworks-WuIpNTdMA9v1zvzj-Hq5x5w-t500x500.jpg',
             path: './music/Shirfine - Illusionary Daytime (Zuaste & AlexDy Remix).mp3'
         },
         {
@@ -136,6 +136,12 @@ var app = {
             singer:'执素兮',
             img:'https://i1.sndcdn.com/avatars-000734859046-r4m7d1-t200x200.jpg',
             path: './music/Xích Linh - Chấp Tố Hề -- 赤伶 - 执素兮.mp3'
+        },
+        {
+            name:'Chạy về khóc với anh',
+            singer:'Erik',
+            img:'https://giaithuongtinhnguyen.vn/dien-vien-fukuda/imager_1_7350_300.jpg',
+            path: './music/Chay-Ve-Khoc-Voi-Anh-ERIK.mp3'
         }
     
     ],
@@ -388,6 +394,7 @@ var app = {
             const time2 = app.formatTime(time)
             blockTotolTime.innerText = time2
         })
+        console.log(this.current_song)
     },
     start: function() {
         this.defineProperties()
